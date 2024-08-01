@@ -1,0 +1,100 @@
+
+AUTOMATION OF JENKINS PIPELINE SCRIPT 
+
+ Task Documentation: Automating Pipeline Script
+ Role: Automation developer
+Date: 30-07-2024  [DEMO PROJECT]
+
+Tools Used:
+- Jenkins
+- Git
+- Windows Environment
+
+Steps:
+
+1. Collect Script from Git Repository:
+   - Retrieve the pipeline script from the Jenkins team's Git repository.
+
+2. Review Provided Script:
+   - Analyze and understand the key components and steps.
+
+3. Environment Setup:
+   - Configure Jenkins.
+   - Set up Git for version control.
+
+4. Script Modification:
+   - Integrate automated tasks into the Jenkins pipeline script.
+   - Use `bat` commands for Windows-specific operations.
+
+5. Implement Automated Testing:
+   - Design and integrate automated tests.
+   - Example pipeline snippet:
+
+PIPELINE SCRIPT :-
+pipeline {
+    agent any
+     stages {
+        stage('Checkout Repositories') {
+            parallel {
+                stage('Checkout Project-Development') {
+                    steps {
+                        dir('Project-Development') {
+                            git branch: 'master', url: 'https://github.com/SucharithaSathupalli01/Project-Development.git'
+                        }
+                    }
+                }
+                stage('Checkout Project-UAT') {
+                    steps {
+                        dir('Project-UAT') {
+                            git branch: 'master', url: 'https://github.com/SucharithaSathupalli01/Project-UAT.git'
+                        }
+                    }
+                }
+                stage('Checkout Project-Production') {
+                    steps {
+                        dir('Project-Production') {
+                            git branch: 'master', url: 'https://github.com/SucharithaSathupalli01/Project-Production.git'
+                        }
+                    }
+                }
+            }
+        }
+        stage('Configure Git User') {
+            steps {
+                echo 'Configuring Git user...'
+                bat '''
+                git config --global user.name "harish"
+                git config --global user.email "harishcloud1810@gmail.com"
+                '''
+                echo 'Git user configured.'
+            }
+        }
+        stage('Commit and Push Changes') {
+            steps {
+                echo 'Committing and pushing changes...'
+                dir('Project-Development') {
+                    bat '''
+                    echo Current directory: %cd%
+                    git status
+                    git add . 
+                    git commit -m "created"
+                    git push origin master
+                    '''
+                }                
+            }
+        }
+    }
+}
+
+6. Develop Automation Scripts:
+   - Create scripts for repetitive tasks and integrate them into the pipeline.
+
+7. Testing and Validation:
+   - Test the pipeline script to ensure all tasks execute correctly.
+
+8. Documentation and Maintenance:
+   - Document changes and provide maintenance instructions.
+
+Outcome:
+- Successfully automated the pipeline script, ensuring efficient build and testing processes.
+- The script is version controlled in Git for future updates.
